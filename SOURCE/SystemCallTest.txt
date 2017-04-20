@@ -1,0 +1,10 @@
+#Repeats the input of the user to the ascii display screen
+Mainloop:	CALL Sys_GetKeyCode
+	OUT 0, R0
+	JMP Mainloop
+
+#waits for a key press and then returns the key value on the stack
+Sys_GetKeyCode:  IN R0, 0
+	SUB R0, D0
+	JZ	Sys_GetKeyCode
+	RET
