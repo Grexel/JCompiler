@@ -88,9 +88,9 @@ public class TokenizerStream {
         }
         else if(id.startsWith("r")||id.startsWith("R")){
             return new Token("register", id.substring(1,2));
-        }else
-            throwError("Not a keyword or label.");
-        return null;
+        }else{
+            return new Token("variable", id); //no brackets for CALL and JMP
+        }
     }
     public Token readVariable(){
         characterStream.next(); //clear [ from the stream

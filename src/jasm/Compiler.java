@@ -5,30 +5,55 @@
  */
 package jasm;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Jeff
  */
 public class Compiler {
-    Parser parser;
     ArrayList<String> compiledInstructions;
+    ArrayList<String> errors;
+    
+    Parser parser;
     ArrayList<Node> nodes;
-    String text;
+    
+    File textFile;
 
     public Compiler() {
         compiledInstructions = new ArrayList<>();
+        errors = new ArrayList<>();
     }
     
+    public void compile(File file){
+        compiledInstructions.clear();
+        errors.clear();
+        
+        this.textFile = file;
+        compile(loadTextFromFile(textFile));
+    }
     public void compile(String text){
         compiledInstructions.clear();
-        this.text = text;
+        errors.clear();
+        
         parser = new Parser(text);
         nodes = parser.parse();
         
         setAddresses(nodes);
         compileInstructions(nodes);
+        
+        //break into high and low.
+        if(errors.isEmpty()){
+            saveCompiled(compiledInstructions);
+        }
     }
 
     private void setAddresses(ArrayList<Node> nodes) {
@@ -40,7 +65,6 @@ public class Compiler {
         }
         //turn 
     }
-
     private void compileInstructions(ArrayList<Node> nodes) {
         for(Node n : nodes){
             if(n instanceof VariableNode){
@@ -54,8 +78,63 @@ public class Compiler {
             }
             else if(n instanceof InstructionNode){
                 InstructionNode instruct = (InstructionNode)n;
-                if(instruct.command.getValue().equalsIgnoreCase("LOD")){
+                String command = instruct.command.getValue();
+                if(command.equalsIgnoreCase("LOD")){
                     compileLOD(instruct);
+                }
+                if(command.equalsIgnoreCase("MOV")){
+                    compileMOV(instruct);
+                }
+                if(command.equalsIgnoreCase("STO")){
+                    compileSTO(instruct);
+                }
+                if(command.equalsIgnoreCase("OUT")){
+                    compileOUT(instruct);
+                }
+                if(command.equalsIgnoreCase("IN")){
+                    compileIN(instruct);
+                }
+                if(command.equalsIgnoreCase("ADD")){
+                    compileADD(instruct);
+                }
+                if(command.equalsIgnoreCase("ADC")){
+                    compileADC(instruct);
+                }
+                if(command.equalsIgnoreCase("SUB")){
+                    compileSUB(instruct);
+                }
+                if(command.equalsIgnoreCase("SBB")){
+                    compileSBB(instruct);
+                }
+                if(command.equalsIgnoreCase("JMP")){
+                    compileJMP(instruct, 0);
+                }
+                if(command.equalsIgnoreCase("JZ")){
+                    compileJMP(instruct, 1);
+                }
+                if(command.equalsIgnoreCase("JNZ")){
+                    compileJMP(instruct, 2);
+                }
+                if(command.equalsIgnoreCase("JC")){
+                    compileJMP(instruct, 3);
+                }
+                if(command.equalsIgnoreCase("JNC")){
+                    compileJMP(instruct, 4);
+                }
+                if(command.equalsIgnoreCase("PUSH")){
+                    compilePUSH(instruct);
+                }
+                if(command.equalsIgnoreCase("POP")){
+                    compilePOP(instruct);
+                }
+                if(command.equalsIgnoreCase("CALL")){
+                    compileCALL(instruct);
+                }
+                if(command.equalsIgnoreCase("RET")){
+                    compileRET(instruct);
+                }
+                if(command.equalsIgnoreCase("HLT")){
+                    compileHLT(instruct);
                 }
             }
         }
@@ -309,33 +388,70 @@ public class Compiler {
         compiledInstructions.add(HHNibble + HLNibble + LHNibble + LLNibble);
         compiledInstructions.add(address);
     }
-    private void compilePUSH(InstructionNode instruct, int type){
+    private void compilePUSH(InstructionNode instruct){
                 
-        Token destination = instruct.arguments.get(0); //label
+        Token src = instruct.arguments.get(0); //register to push
         
         //Instruction
-        String HHNibble = "7";
-        String HLNibble = toHex(type);
+        String HHNibble = "8";
+        String HLNibble = src.getValue();
         String LHNibble = "0";
         String LLNibble = "0";
+        String address = "FFFF"; //label to jump to
+        
+        compiledInstructions.add(HHNibble + HLNibble + LHNibble + LLNibble);
+        compiledInstructions.add(address);
+    }
+    private void compilePOP(InstructionNode instruct){
+                
+        Token dest = instruct.arguments.get(0); //register to pop to
+        
+        //Instruction
+        String HHNibble = "9";
+        String HLNibble = dest.getValue();
+        String LHNibble = "0";
+        String LLNibble = "0";
+        String address = "FFFF"; //unnecessary
+        
+        compiledInstructions.add(HHNibble + HLNibble + LHNibble + LLNibble);
+        compiledInstructions.add(address);
+    }
+    private void compileCALL(InstructionNode instruct){
+                
+        Token destination = instruct.arguments.get(0); //label to jump to
+        
+        //Instruction
+        String HHNibble = "8";
+        String HLNibble = "0";
+        String LHNibble = "0";
+        String LLNibble = "1";
         String address = "FFFF"; //label to jump to
         
         //destination
         if(destination.getType().equalsIgnoreCase("variable")){
             address = searchLabelAddress(destination.getValue());
         }
+        
         compiledInstructions.add(HHNibble + HLNibble + LHNibble + LLNibble);
         compiledInstructions.add(address);
     }
+    private void compileRET(InstructionNode instruct){
+        
+        //Instruction
+        String HHNibble = "9";
+        String HLNibble = "0";
+        String LHNibble = "0";
+        String LLNibble = "1";
+        String address = "FFFF"; //
+        
+        compiledInstructions.add(HHNibble + HLNibble + LHNibble + LLNibble);
+        compiledInstructions.add(address);
+    }
+    private void compileHLT(InstructionNode instruct){
+        compiledInstructions.add("FFFF");
+        compiledInstructions.add("FFFF");
+    }
     
-    /*
-        commandList.add("PUSH");
-        commandList.add("POP");
-        commandList.add("CALL");
-        commandList.add("RET");
-        commandList.add("HLT");
-        commandList.add("VAR");
-*/
     private String searchLabelAddress(String value) {
         
         for(Node n : nodes){
@@ -412,7 +528,14 @@ public class Compiler {
                  + "LOD R0, 0xFFFF \n"
                  + "var1:   VAR 12 \n"
                  + "var2:   VAR 0xFE \n"
-                +  "LOD R1, [var1]";
+                 + "LOD R1, [var1] \n"
+                 + "ADD R0, 0xFFF \n"
+                 + "CALL Mult \n"
+                 + "Mult: OUT 0, 0x45 \n"
+                 + "    OUT 0, 0x46 \n"
+                 + "     OUT 0, 0x47 \n"
+                 +  "RET \n"
+                 + "";
         Compiler comp = new Compiler();
         comp.compile(st);
         for(Node s : comp.parser.nodes){
@@ -420,6 +543,56 @@ public class Compiler {
         }
         for(String s : comp.compiledInstructions){
             System.out.println(s);
+        }
+    }
+
+    public boolean hasErrors(){
+        return !errors.isEmpty();
+    }
+    public ArrayList<String> getErrors(){
+        return errors;
+    }
+    private String loadTextFromFile(File textFile) {
+        StringBuilder sb = new StringBuilder();
+        try{
+            Scanner sc = new Scanner(textFile);
+            while(sc.hasNextLine()){
+                sb.append(sc.nextLine());
+                sb.append("\n");
+            }
+            return sb.toString();
+        }catch(FileNotFoundException fnf){
+            errors.add("Could not open file" + textFile.getName());
+        }
+        return "";
+    }
+    private void saveCompiled(ArrayList<String> compiledInstructions) {
+        File hiByte;
+        File loByte;
+        
+        if(textFile != null){
+            String hiByteString = textFile.getParent() + File.separator
+                    + textFile.getName().substring(0, textFile.getName().length() - 4)
+                    + "Hi.txt";
+            String loByteString = textFile.getParent() + File.separator
+                    + textFile.getName().substring(0, textFile.getName().length() - 4)
+                    + "Lo.txt";
+            hiByte = new File(hiByteString);
+            loByte = new File(loByteString);
+        }
+        else{
+            hiByte = new File("tempHi.txt");
+            loByte = new File("tempLo.txt");
+        }
+        
+        try (BufferedWriter bwHi = new BufferedWriter(new FileWriter(hiByte));
+                BufferedWriter bwLo = new BufferedWriter(new FileWriter(loByte))) {
+            for(String bytecode : compiledInstructions){
+                bwHi.append(bytecode.substring(0,2)).append("\n");
+                bwLo.append(bytecode.substring(2)).append("\n");
+            }
+        } catch (IOException ex) {
+        Logger.getLogger(Compiler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -6,11 +6,11 @@ CALL SayHi
 CALL SayBye
 HLT
 
-SayBye:	OUT 0, h42
-		OUT 0,  h79
-		OUT 0, h65
+SayBye:	OUT 0, 0x42
+		OUT 0,  0x79
+		OUT 0, 0x65
 		RET
 
-SayHi:	OUT 0, h48
-		OUT 0, h69
+SayHi:	OUT 0, 0x48
+		OUT 0, 0x69
 		RET
