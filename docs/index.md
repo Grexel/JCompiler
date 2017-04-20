@@ -4,7 +4,7 @@ This is a project that started from a simple 8-bit MMLogic computer. This 8-bit 
 
 ### The 16-bit MMLogic Computer
 Going from 8-bit to 16-bit created a very large computer(around 50 pages), but many pages go to modeling 8 registers, inputs, outputs, computer registers, and busses. The magic happens in a few Instruction pages that control the data flow.
-The Tutorial can be found [here](https://github.com/Grexel/JCompiler/blob/master/docs/MMLogicCPU.md).
+The Tutorial can be found [here](https://grexel.github.io/JCompiler/MMLogicTutorial/).
 ### The Assembly Compiler
 The first attempt at a compiler is in [jeffASM](https://github.com/Grexel/JCompiler/tree/master/src/jeffasm). The compiler had bad design(checking individual characters to complete the code generation), but worked. I came across [How to implement a programming language in JavaScript](http://lisperator.net/pltut/) which showed a better way to write a compiler.
 Loosely following the tutorial I came up with these steps:
