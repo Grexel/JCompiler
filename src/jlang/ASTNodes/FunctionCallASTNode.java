@@ -24,5 +24,5 @@ public class FunctionCallASTNode extends ASTNode {
     @Override
     public String getNodeType() {
         return "call";
-    }    
+    }
 }

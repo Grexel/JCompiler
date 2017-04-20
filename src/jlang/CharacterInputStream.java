@@ -10,7 +10,7 @@ package jlang;
  * @author Jeff
  */
 public class CharacterInputStream {
-    String ch;
+    char ch;
     String text;
     int position;
     int lineNumber, columnNumber;
@@ -21,9 +21,9 @@ public class CharacterInputStream {
         lineNumber = 1;
         columnNumber = 1;
     }
-    public String next(){
-        ch = text.substring(position, position+1);
-        if(ch.equalsIgnoreCase("\n")){
+    public char next(){
+        ch = text.charAt(position);
+        if(ch == '\n'){
             lineNumber++;
             columnNumber = 1;
         }else{
@@ -32,14 +32,19 @@ public class CharacterInputStream {
         position++;
         return ch;
     }
-    public String peek(){
+    public char peek(){
         if(position != text.length())
-            return text.substring(position, position+1);
-        else
-            return null;
+            return text.charAt(position);
+        else{
+            throwError("End of file");
+            return 0;
+        }
+    }
+    public boolean hasNext(){
+        return !endOfText();
     }
     public boolean endOfText(){
-        return position == text.length();
+        return position >= text.length();
     }
     public void throwError(String msg){
         System.out.println(msg + "Line:"+lineNumber + " Col: " + columnNumber);

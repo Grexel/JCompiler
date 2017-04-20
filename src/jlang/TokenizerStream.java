@@ -26,9 +26,9 @@ public class TokenizerStream {
             return null;
         }
         
-        String ch = characterStream.peek();
+        char ch = characterStream.peek();
         //Comment
-        if(ch.equalsIgnoreCase("#")){
+        if(ch == '#'){
             skipComment();
             return readNextToken();
         }
@@ -39,7 +39,7 @@ public class TokenizerStream {
             return readID();
         }
         if(isPunctuation(ch)){
-            return new Token("punctuation", characterStream.next());
+            return new Token("punctuation", "" + characterStream.next());
         }
         if(isOperator(ch)){
             return readOperator();
@@ -47,23 +47,35 @@ public class TokenizerStream {
         characterStream.throwError("Can't handle this character");
         return null;
     }
+    //
+    //format 9999 for deximal, 0xFFFF for hex
     public Token readNumber(){
+        
+        String type = "decimal";
         String number = "";
-        String s = characterStream.peek();
-        while(isDigit(s)){
-            number += characterStream.next();
-            if(characterStream.endOfText()) break;
-            s = characterStream.peek();
+        number += characterStream.next();
+        
+        //check for 0x
+        char ch = characterStream.peek();
+        if(ch == 'x'){
+            number = "";
+            type = "hex";
+            characterStream.next(); // get rid of the x to read hex
+            ch = characterStream.peek();
         }
-        return new Token("number", number);
+        while(isHex(ch) && characterStream.hasNext()){ // true for decimal and hex
+            number += characterStream.next();
+            ch = characterStream.peek();
+        }
+        
+        return new Token(type, number);
     }
     public Token readID(){
         String id = "";
-        String s = characterStream.peek();
-        while(isIDChar(s)){
+        char ch = characterStream.peek();
+        while(isIDChar(ch) && characterStream.hasNext()){
             id += characterStream.next();
-            if(characterStream.endOfText()) break;
-            s = characterStream.peek();
+            ch = characterStream.peek();
         }
         if(keywordList.contains(id)){
             return new Token("keyword", id);
@@ -74,11 +86,10 @@ public class TokenizerStream {
     }
     public Token readOperator(){
         String operate = "";
-        String s = characterStream.peek();
-        while(isOperator(s)){
+        char ch = characterStream.peek();
+        while(isOperator(ch) && characterStream.hasNext()){
             operate += characterStream.next();
-            if(characterStream.endOfText()) break;
-            s = characterStream.peek();
+            ch = characterStream.peek();
         }
         return new Token("operator", operate);
     }
@@ -86,22 +97,38 @@ public class TokenizerStream {
     public boolean isKeyword(String s){
         return keywordList.contains(s);
     }
-    public boolean isDigit(String s){
-        return Character.isDigit(s.charAt(0));
+    public boolean isDigit(char ch){
+        return Character.isDigit(ch);
     }
-    public boolean isIDStart(String s){
-        return Character.isAlphabetic(s.charAt(0));
+    public boolean isHex(char ch){
+        if(Character.isDigit(ch)) return true;
+        switch(ch){
+            case 'a':return true;
+            case 'A':return true;
+            case 'b':return true;
+            case 'B':return true;
+            case 'c':return true;
+            case 'C':return true;
+            case 'd':return true;
+            case 'D':return true;
+            case 'e':return true;
+            case 'E':return true;
+            case 'f':return true;
+            case 'F':return true;
+            default: return false;
+        }
+    }    
+    public boolean isIDStart(char ch){
+        return Character.isAlphabetic(ch);
     }
-    public boolean isIDChar(String s){
-        char ch = s.charAt(0);
+    public boolean isIDChar(char ch){
         if(Character.isAlphabetic(ch) || Character.isDigit(ch) ||
                 ch == '_'){
             return true;
         }
         return false;
     }
-    public boolean isOperator(String s){
-        char ch = s.charAt(0);
+    public boolean isOperator(char ch){
         switch(ch){
             case '+': return true;
             case '-': return true;
@@ -116,8 +143,7 @@ public class TokenizerStream {
             default: return false;
         }
     }  
-    public boolean isPunctuation(String s){
-        char ch = s.charAt(0);
+    public boolean isPunctuation(char ch){
         switch(ch){
             case ',': return true;
             case ';': return true;
@@ -128,26 +154,29 @@ public class TokenizerStream {
             default: return false;
         }
     }
-    
+    public boolean hasNext(){
+        return !isEmpty();
+    }
     public boolean isEmpty(){
         return peek() == null;
     }
     public void skipWhiteSpace(){
         boolean whiteSpace;
         do{
-            if(characterStream.endOfText()) break;
-            String nextChar = characterStream.peek();
-            whiteSpace = Character.isWhitespace(nextChar.charAt(0));
+            char nextChar = characterStream.peek();
+            whiteSpace = Character.isWhitespace(nextChar);
             if(whiteSpace){
                 characterStream.next();
             }
-        }while(whiteSpace);
+        }while(whiteSpace && characterStream.hasNext());
     } 
     public void skipComment(){
+        //did not dispose of the first #, so take 2.
+        //comment is #comment goes here #
         int numberOfHashSymbols = 0;
-        while(numberOfHashSymbols < 2){
-            String s = characterStream.next();
-            if(s.equalsIgnoreCase("#"))
+        while(numberOfHashSymbols < 2 && characterStream.hasNext()){
+            char ch = characterStream.next();
+            if(ch == '#')
                 numberOfHashSymbols++;
         }
     }

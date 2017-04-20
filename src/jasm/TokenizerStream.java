@@ -22,7 +22,7 @@ public class TokenizerStream {
     }
     public Token readNextToken(){
         skipWhiteSpace();
-        if(characterStream.endOfText()){
+        if(characterStream.isEmpty()){
             return null;
         }
         
@@ -57,7 +57,7 @@ public class TokenizerStream {
         String number = "";
         number += characterStream.next();
         
-        //check for x
+        //check for 0x
         char ch = characterStream.peek();
         if(ch == 'x'){
             number = "";
@@ -77,7 +77,7 @@ public class TokenizerStream {
         char ch = characterStream.peek();
         while(isIDChar(ch)){
             id += characterStream.next();
-            if(characterStream.endOfText()) break;
+            if(characterStream.isEmpty()) break;
             ch = characterStream.peek();
         }
         if(commandList.contains(id)){
@@ -86,7 +86,7 @@ public class TokenizerStream {
         else if(id.endsWith(":")){
             return new Token("label", id.substring(0, id.length()-1));            
         }
-        else if(id.startsWith("r")||id.startsWith("R")){
+        else if(isRegister(id)){
             return new Token("register", id.substring(1,2));
         }else{
             return new Token("variable", id); //no brackets for CALL and JMP
@@ -98,7 +98,7 @@ public class TokenizerStream {
         char ch = characterStream.peek();
         while(ch != ']'){
             varName += characterStream.next();
-            if(characterStream.endOfText()) break;
+            if(characterStream.isEmpty()) break;
             ch = characterStream.peek();
         }
         characterStream.next(); // clear the remaing ]
@@ -146,12 +146,13 @@ public class TokenizerStream {
             default: return false;
         }
     }
-    public boolean isConstantID(char ch){
-        switch(ch){
-            case 'h': return true;
-            case 'd': return true;
-            default: return false;
-        }
+    public boolean isRegister(String id) { //format = r# or R#
+      if(id.startsWith("r") || id.startsWith("R")){
+          if(isDigit(id.charAt(1))){
+              return true;
+          }
+      } 
+      return false;
     }
     
     public boolean hasNext(){
@@ -163,7 +164,7 @@ public class TokenizerStream {
     public void skipWhiteSpace(){
         boolean whiteSpace;
         do{
-            if(characterStream.endOfText()) break;
+            if(characterStream.isEmpty()) break;
             char nextChar = characterStream.peek();
             whiteSpace = Character.isWhitespace(nextChar) 
                     || isPunctuation(nextChar);
@@ -175,7 +176,7 @@ public class TokenizerStream {
     }  
     public void skipComment(){
         while(true){
-            if(characterStream.endOfText()) break;
+            if(characterStream.isEmpty()) break;
             char s = characterStream.next();
             if(s == '\n') break;
         }
@@ -241,4 +242,5 @@ public class TokenizerStream {
     private void throwError(String msg) {
         characterStream.throwError(msg);
     }
+
 }

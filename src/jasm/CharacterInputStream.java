@@ -35,11 +35,11 @@ public class CharacterInputStream {
     }
     public char peek(){
         if(position != text.length())
-            return text.substring(position, position+1).charAt(0);
+            return text.charAt(position);
         else
             return 0;
     }
-    public boolean endOfText(){
+    public boolean isEmpty(){
         return position == text.length();
     }
     public void throwError(String msg){

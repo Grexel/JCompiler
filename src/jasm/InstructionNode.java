@@ -14,8 +14,7 @@ import java.util.ArrayList;
 public class InstructionNode extends Node{
     Token command;
     ArrayList<Token> arguments;
-    
-
+   
     public InstructionNode(Token label, Token command, ArrayList<Token> arguments) {
         super(label);
         this.command = command;

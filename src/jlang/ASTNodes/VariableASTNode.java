@@ -13,11 +13,11 @@ import jlang.ASTNode;
  */
 public class VariableASTNode extends ASTNode {
     String dataType;
-    String value;
+    String name;
 
-    public VariableASTNode(String dataType, String value) {
+    public VariableASTNode(String dataType, String name) {
         this.dataType = dataType;
-        this.value = value;
+        this.name = name;
     }
     @Override
     public String getNodeType() {
