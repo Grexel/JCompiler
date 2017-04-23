@@ -4,10 +4,10 @@ This is a project that started from a simple 8-bit MMLogic computer. This 8-bit 
 
 ### The 16-bit MMLogic Computer
 Going from 8-bit to 16-bit created a very large computer(around 50 pages), but many pages go to modeling 8 registers, inputs, outputs, computer registers, and busses. The magic happens in a few Instruction pages that control the data flow.
-The Tutorial can be found [here](https://grexel.github.io/JCompiler/MMLogicTutorial/).
+The Tutorial can be found [here](https://grexel.github.io/JCompiler/MMLogicTutorial).
 ### The Assembly Compiler
 The first attempt at a compiler is in [jeffASM](https://github.com/Grexel/JCompiler/tree/master/src/jeffasm). The compiler had bad design(checking individual characters to complete the code generation), but worked. I came across [How to implement a programming language in JavaScript](http://lisperator.net/pltut/) which showed a better way to write a compiler.
-Loosely following the tutorial I came up with these steps:
+Loosely following the tutorial I came up with these steps to create the next compiler [jasm](https://github.com/Grexel/JCompiler/tree/master/src/jeffasm):
 1. create a character stream that reads in single characters from the file.
 2. create a token stream that reads in a group of characters separated by whitespace.
   - give these tokens a type (such as keyword, number, id) and a value (such as LOD, 45, var1)
@@ -105,35 +105,3 @@ getKeyPress:  IN R0, 0
 num7:   VAR 7
 keyPress: VAR 0
 ```
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Grexel/JCompiler/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
