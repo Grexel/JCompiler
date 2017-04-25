@@ -1,0 +1,40 @@
+
+Grammar for JLang is:
+
+-------------------------
+functions are:
+function returnType functionName (dataType arg1,dataType arg2,.)){
+    //codeblock
+}
+where arguments are optional and returnType is the return value's datatype
+
+-------------------------
+Control:
+    if(conditional){
+        //codeblock
+    }
+    else{
+        //codeblock
+    }
+    while(conditional){
+        //codeblock
+    }
+where conditional fails if the value is 0 //boolean false
+
+-------------------------
+Conditional
+(var/num operator var/num)
+
+operators are:
+    >, <, ==, <=, >=, &&, ||, !
+
+---------------------------
+DataTypes are:  
+short(16bit), int(32bit), long(64bit), bool(16bit, 0 = false)
+
+---------------------------
+comments are:
+# Block comment start 
+and ends with a
+# 
+

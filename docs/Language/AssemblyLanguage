@@ -1,0 +1,5 @@
+Grammar for assembly is:
+for instructions
+(label) COMMAND (arg1,arg2,...)
+for data
+label VAR data

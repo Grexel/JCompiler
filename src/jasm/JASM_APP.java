@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -27,6 +28,8 @@ public class JASM_APP extends Application {
     Stage primaryStage;
     JASMPane assemblyPane;
     FileChooser fileChooser;
+    CheckMenuItem _8bitCompilerMenu;
+    CheckMenuItem _16bitCompilerMenu;
     
     String title;
     boolean newFile;
@@ -102,10 +105,18 @@ public class JASM_APP extends Application {
          * *********************************************************************
          * Options Menu Section
          */
-        MenuItem compile = new MenuItem("Compile program");
-        compile.setAccelerator(KeyCombination.keyCombination("Ctrl+Shift+C"));
-        compile.setOnAction(e -> compile());
-        optionsMenu.getItems().add(compile);
+        _8bitCompilerMenu = new CheckMenuItem("Select 8bit Compiler");
+        _8bitCompilerMenu.setOnAction(e -> select8BitCompiler());
+        optionsMenu.getItems().add(_8bitCompilerMenu);
+        
+        _16bitCompilerMenu= new CheckMenuItem("Select 16bit Compiler");
+        _16bitCompilerMenu.setOnAction(e -> select16BitCompiler());
+        optionsMenu.getItems().add(_16bitCompilerMenu);
+        
+//        MenuItem compile = new MenuItem("Compile program");
+//        compile.setAccelerator(KeyCombination.keyCombination("Ctrl+Shift+C"));
+//        compile.setOnAction(e -> compile());
+//        optionsMenu.getItems().add(compile);
 
 
         
@@ -226,6 +237,16 @@ public class JASM_APP extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    private void select8BitCompiler() {
+        assemblyPane.setCompiler(new Compiler_8bit());
+        _16bitCompilerMenu.setSelected(false);
+    }
+
+    private void select16BitCompiler() {
+        assemblyPane.setCompiler(new Compiler_16bit());
+        _8bitCompilerMenu.setSelected(false);   
     }
     
 }

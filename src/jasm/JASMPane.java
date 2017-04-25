@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.util.Scanner;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -30,7 +31,6 @@ public class JASMPane extends Pane {
     Label lbError;
     TextArea taData;
     TextArea taError;
-    
     Compiler compiler;
     File dataFile;
 
@@ -40,7 +40,7 @@ public class JASMPane extends Pane {
      */
     public JASMPane(Stage parentStage) {
         this.parentStage = parentStage;
-        compiler = new Compiler();
+        compiler = new Compiler_16bit();
         
         File directory = new File(".");
         dataFile = new File(directory.getAbsoluteFile() + File.separator + "New File.txt");
@@ -75,6 +75,9 @@ public class JASMPane extends Pane {
         this.getChildren().add(bpInformation);
     }
 
+    public void setCompiler(Compiler comp){
+        compiler = comp;
+    }
     public void newFile(){
         dataFile = new File("temp.txt");
         clearTextAreas();
