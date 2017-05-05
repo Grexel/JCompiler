@@ -14,6 +14,6 @@ One may be able to get around this by slowing the clock down considerably.
 ![alt text][deviePanel]
 The device panel only contains the keyboard input so far. In the future it may hold networks and drives.
 
-[mainControlPanel]: https://grexel.github.io/JCompiler/MML_16bit/ControlPanel/MainControl.jpeg "Main Control Panel"
-[secondaryControlPanel]: https://grexel.github.io/JCompiler/MML_16bit/ControlPanel/SecondaryControl.jpeg "Secondary Control Panel"
-[devicePanel]: https://grexel.github.io/JCompiler/MML_16bit/ControlPanel/DevicePanel.jpeg "Device Panel"
+[mainControlPanel]: https://grexel.github.io/JCompiler/MML_16bit/ControlPanel/MainControl.jpg "Main Control Panel"
+[secondaryControlPanel]: https://grexel.github.io/JCompiler/MML_16bit/ControlPanel/SecondaryControl.jpg "Secondary Control Panel"
+[devicePanel]: https://grexel.github.io/JCompiler/MML_16bit/ControlPanel/DevicePanel.jpg "Device Panel"
