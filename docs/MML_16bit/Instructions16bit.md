@@ -19,7 +19,7 @@ Jumping is demultiplexed from 3 instruction bits. Jumping includes options such 
 The RAM array uses two 64kb 8bit RAM modules side by side to allow 16 bit width of each stage. 
 This poses a few problems such as necessitating two files to be created from the compiler, and having the "byte width" be 16 bit instead of 8 bit.
 
-[clock]: https://grexel.github.io/JCompiler/MML_16bit/Clock.jpg "Clock"
-[instruction]: https://grexel.github.io/JCompiler/MML_16bit/Instructions.jpg "Instruction Decoder"
-[jump]: https://grexel.github.io/JCompiler/MML_16bit/Jump.jpg "Jumping"
-[ram]: https://grexel.github.io/JCompiler/MML_16bit/RAM/RAMArray.jpg "RAM"
+[clock]: https://github.com/Grexel/JCompiler/blob/master/docs/MML_16bit/Clock.JPG "Clock"
+[instruction]: https://github.com/Grexel/JCompiler/blob/master/docs/MML_16bit/Instructions.JPG "Instruction Decoder"
+[jump]: https://github.com/Grexel/JCompiler/blob/master/docs/MML_16bit/Jump.JPG "Jumping"
+[ram]: https://github.com/Grexel/JCompiler/blob/master/docs/MML_16bit/RAM/RAMArray.JPG "RAM"
