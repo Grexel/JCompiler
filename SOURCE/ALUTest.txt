@@ -1,5 +1,0 @@
-#Testing the Inbuilt ALU for MMLogic
-Main:	LOD r0, h45
-		LOD r1, h33
-		ADD r0,r1
-		HLT

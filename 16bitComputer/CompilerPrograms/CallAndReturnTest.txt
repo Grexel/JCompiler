@@ -1,0 +1,16 @@
+#Stack test
+CALL SayHi
+CALL SayBye
+CALL SayHi
+CALL SayHi
+CALL SayBye
+HLT
+
+SayBye:	OUT 0, 0x42
+		OUT 0,  0x79
+		OUT 0, 0x65
+		RET
+
+SayHi:	OUT 0, 0x48
+		OUT 0, 0x69
+		RET

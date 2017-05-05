@@ -1,0 +1,17 @@
+#Testing the Inbuilt ALU for MMLogic
+Main:	LOD r0, 0x45
+		LOD r1, 0x33
+		ADD r0,r1
+		OUT 1, r0
+		LOD r2, 0xFF
+		SUB r2, 0x11
+		OUT 2, r2
+		LOD r0, 0x0023
+		LOD r1, 0x0024
+		LOD r2, 0x5959
+		LOD r3, 0xAAAA
+		ADD r2, r3
+		OUT 4, r2
+		ADC r0,r1
+		OUT 3, r0		
+		HLT

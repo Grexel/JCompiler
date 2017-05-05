@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -252,7 +253,7 @@ public class Compiler_16bit extends Compiler{
         String HLNibble = registerToSave.getValue();
         String LHNibble = "0";
         String LLNibble = "0"; // 1 for ADC
-        String address = "XXXX"; //can be an address or a constant
+        String address = "FFFF"; //can be an address or a constant
         
         //constant not register
         if(addend.getType().equalsIgnoreCase("register")){
@@ -284,7 +285,7 @@ public class Compiler_16bit extends Compiler{
         String HLNibble = registerToSave.getValue();
         String LHNibble = "0";
         String LLNibble = "1"; // 1 for ADC
-        String address = "XXXX"; //can be an address or a constant
+        String address = "FFFF"; //can be an address or a constant
         
         //constant not register
         if(addend.getType().equalsIgnoreCase("register")){
@@ -316,7 +317,7 @@ public class Compiler_16bit extends Compiler{
         String HLNibble = registerToSave.getValue();
         String LHNibble = "0";
         String LLNibble = "0"; // 1 for ADC
-        String address = "XXXX"; //can be an address or a constant
+        String address = "FFFF"; //can be an address or a constant
         
         //constant not register
         if(addend.getType().equalsIgnoreCase("register")){
@@ -348,7 +349,7 @@ public class Compiler_16bit extends Compiler{
         String HLNibble = registerToSave.getValue();
         String LHNibble = "0";
         String LLNibble = "1"; // 1 for ADC
-        String address = "XXXX"; //can be an address or a constant
+        String address = "FFFF"; //can be an address or a constant
         
         //constant not register
         if(addend.getType().equalsIgnoreCase("register")){
@@ -376,8 +377,8 @@ public class Compiler_16bit extends Compiler{
         
         //Instruction
         String HHNibble = "7";
-        String HLNibble = toHex(type);
-        String LHNibble = "0";
+        String HLNibble = "0";
+        String LHNibble = toHex(type);
         String LLNibble = "0";
         String address = "FFFF"; //label to jump to
         
@@ -460,7 +461,7 @@ public class Compiler_16bit extends Compiler{
                 return decimalToHex(n.address);
             }
         }
-        return "XXXX";
+        return "0000";
     }
     private String decimalToHex(int i){
         int accumulator = 0;
@@ -498,7 +499,7 @@ public class Compiler_16bit extends Compiler{
             case 13: return "D";
             case 14: return "E";
             case 15: return "F";
-            default: return "X";
+            default: return "0";
         }
         
     }
@@ -585,11 +586,15 @@ public class Compiler_16bit extends Compiler{
             loByte = new File("tempLo.txt");
         }
         
+        byte[] encoded;
         try (BufferedWriter bwHi = new BufferedWriter(new FileWriter(hiByte));
                 BufferedWriter bwLo = new BufferedWriter(new FileWriter(loByte))) {
             for(String bytecode : compiledInstructions){
-                bwHi.append(bytecode.substring(0,2)).append("\n");
-                bwLo.append(bytecode.substring(2)).append("\n");
+                encoded = bytecode.substring(0,2).getBytes(StandardCharsets.US_ASCII);
+                bwHi.append(new String(encoded,StandardCharsets.US_ASCII)).append("\n");
+                
+                encoded = bytecode.substring(2).getBytes(StandardCharsets.US_ASCII);
+                bwLo.append(new String(encoded,StandardCharsets.US_ASCII)).append("\n");
             }
         } catch (IOException ex) {
         Logger.getLogger(Compiler_16bit.class.getName()).log(Level.SEVERE, null, ex);

@@ -192,6 +192,7 @@ public class TokenizerStream {
         commandList.add("ADC");
         commandList.add("SUB");
         commandList.add("SBB");
+        commandList.add("CMP");
         commandList.add("JMP");
         commandList.add("JZ");
         commandList.add("JNZ");

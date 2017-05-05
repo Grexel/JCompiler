@@ -113,10 +113,10 @@ public class JASM_APP extends Application {
         _16bitCompilerMenu.setOnAction(e -> select16BitCompiler());
         optionsMenu.getItems().add(_16bitCompilerMenu);
         
-//        MenuItem compile = new MenuItem("Compile program");
-//        compile.setAccelerator(KeyCombination.keyCombination("Ctrl+Shift+C"));
-//        compile.setOnAction(e -> compile());
-//        optionsMenu.getItems().add(compile);
+        MenuItem compile = new MenuItem("Compile program");
+        compile.setAccelerator(KeyCombination.keyCombination("Ctrl+Shift+C"));
+        compile.setOnAction(e -> compile());
+        optionsMenu.getItems().add(compile);
 
 
         

@@ -1,0 +1,50 @@
+#Test program for 8 bit compiler
+
+#Test add
+Main:	LOD 0x45
+		ADD 0x33
+		OUT 1
+#Test Sub
+		LOD 0x45
+		SUB 0x33
+		OUT 2
+#Test CALL and RET
+		CALL sayHi
+		CALL sayBye
+#Test IN with keypress
+userInput:	CALL getKeyPress
+			OUT 0
+			SUB 0x7E
+			JNZ userInput
+#Test Push Pop
+		LOD [var1]
+		PUSH
+		LOD [var2]
+		OUT 2
+		POP
+		OUT 2
+#Test CMP
+		LOD [loopNum]
+		CMP 1
+		JZ End
+		SUB 01
+		STO [loopNum]
+		JMP Main
+End:		HLT
+loopNum:	VAR 03
+var1:		VAR 11
+var2:		VAR 22
+
+sayHi:	OUT 0, 0x48
+		OUT 0, 0x69
+		OUT 0, 0x20
+		RET
+sayBye:	OUT 0, 0x42
+		OUT 0, 0x79
+		OUT 0, 0x65
+		OUT 0, 0x20
+		RET
+getKeyPress:	IN 0
+			ADD 0
+			JZ getKeyPress
+			RET

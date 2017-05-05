@@ -7,7 +7,7 @@ Going from 8-bit to 16-bit created a very large computer(around 50 pages), but m
 The Tutorial can be found [here](https://grexel.github.io/JCompiler/MMLogicTutorial).
 ### The Assembly Compiler
 The first attempt at a compiler is in [jeffASM](https://github.com/Grexel/JCompiler/tree/master/src/jeffasm). The compiler had bad design(checking individual characters to complete the code generation), but worked. I came across [How to implement a programming language in JavaScript](http://lisperator.net/pltut/) which showed a better way to write a compiler.
-Loosely following the tutorial I came up with these steps to create the next compiler [jasm](https://github.com/Grexel/JCompiler/tree/master/src/jeffasm):
+Loosely following the tutorial I came up with these steps to create the next compiler [jasm](https://github.com/Grexel/JCompiler/tree/master/src/jasm):
 1. create a character stream that reads in single characters from the file.
 2. create a token stream that reads in a group of characters separated by whitespace.
   - give these tokens a type (such as keyword, number, id) and a value (such as LOD, 45, var1)

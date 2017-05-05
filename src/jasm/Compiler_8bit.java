@@ -33,6 +33,7 @@ public class Compiler_8bit extends Compiler{
         errors = new ArrayList<>();
     }
     
+    @Override
     public void compile(File file){
         compiledInstructions.clear();
         errors.clear();
@@ -40,6 +41,7 @@ public class Compiler_8bit extends Compiler{
         this.textFile = file;
         compile(loadTextFromFile(textFile));
     }
+    @Override
     public void compile(String text){
         compiledInstructions.clear();
         errors.clear();
@@ -102,6 +104,9 @@ public class Compiler_8bit extends Compiler{
                 }
                 if(command.equalsIgnoreCase("SBB")){
                     compileSBB(instruct);
+                }
+                if(command.equalsIgnoreCase("CMP")){
+                    compileCMP(instruct);
                 }
                 if(command.equalsIgnoreCase("JMP")){
                     compileJMP(instruct, 0);
@@ -177,17 +182,21 @@ public class Compiler_8bit extends Compiler{
     private void compileIN(InstructionNode instruct){
         
         Token port = instruct.arguments.get(0); //decimal
-        Token destination = instruct.arguments.get(1);
         
         //Instruction
         String HNibble = "4";
         String LNibble = port.getValue();
         String address = "FF"; //can be an address or a constant
         
-        //variable not register
-        if(destination.getType().equalsIgnoreCase("variable")){
-            LNibble = addToHex(LNibble,"8"); // save to variable
-            address = searchLabelAddress(destination.getValue());
+        try{
+            Token destination = instruct.arguments.get(1);
+            //variable not register
+            if(destination.getType().equalsIgnoreCase("variable")){
+                LNibble = addToHex(LNibble,"8"); // save to variable
+                address = searchLabelAddress(destination.getValue());
+            }
+        }catch(Exception e){
+            System.out.println("Input to the Register");
         }
         compiledInstructions.add(HNibble + LNibble);
         compiledInstructions.add(address);
@@ -195,21 +204,25 @@ public class Compiler_8bit extends Compiler{
     private void compileOUT(InstructionNode instruct){
         
         Token port = instruct.arguments.get(0); //decimal
-        Token src = instruct.arguments.get(1);
         
         //Instruction
         String HNibble = "3";
         String LNibble = port.getValue();
         String address = "FF"; //can be an address or a constant
         
-        //constant not register
-        if(src.getType().equalsIgnoreCase("hex")){
-            LNibble = "8"; //8 is for constant
-            address = bufferSizeHex(src.getValue());
-        }
-        if(src.getType().equalsIgnoreCase("decimal")){
-            LNibble = "8"; //8 is for constant
-            address = decimalToHex(src.getValue());
+        try{
+            Token src = instruct.arguments.get(1);
+            //constant not register
+            if(src.getType().equalsIgnoreCase("hex")){
+                LNibble = "8"; //8 is for constant
+                address = bufferSizeHex(src.getValue());
+            }
+            if(src.getType().equalsIgnoreCase("decimal")){
+                LNibble = "8"; //8 is for constant
+                address = decimalToHex(src.getValue());
+            }
+        }catch(Exception e){
+            System.out.println("Out from register");
         }
         compiledInstructions.add(HNibble + LNibble);
         compiledInstructions.add(address);
@@ -262,8 +275,7 @@ public class Compiler_8bit extends Compiler{
     }
     private void compileSUB(InstructionNode instruct){
         
-        Token registerToSave = instruct.arguments.get(0); //decimal
-        Token addend = instruct.arguments.get(1);
+        Token addend = instruct.arguments.get(0);
         
         //Instruction
         String HNibble = "5";
@@ -286,11 +298,34 @@ public class Compiler_8bit extends Compiler{
     }
     private void compileSBB(InstructionNode instruct){
         
-        Token registerToSave = instruct.arguments.get(0); //decimal
-        Token addend = instruct.arguments.get(1);
+        Token addend = instruct.arguments.get(0);
         
         //Instruction
         String HNibble = "7";
+        String LNibble = "1"; // ALU Sub is 1
+        String address = "XX"; //can be an address or a constant
+        
+        if(addend.getType().equalsIgnoreCase("variable")){
+            LNibble = "0"; //8 is for constant
+            address = searchLabelAddress(addend.getValue());
+        }
+        if(addend.getType().equalsIgnoreCase("hex")){
+            LNibble = addToHex(LNibble,"8"); //8 is for constant
+            address = bufferSizeHex(addend.getValue());
+        }
+        if(addend.getType().equalsIgnoreCase("decimal")){
+            LNibble = addToHex(LNibble,"8"); //8 is for constant
+            address = decimalToHex(addend.getValue());
+        }
+        compiledInstructions.add(HNibble + LNibble);
+        compiledInstructions.add(address);
+    }
+    private void compileCMP(InstructionNode instruct){
+        
+        Token addend = instruct.arguments.get(0);
+        
+        //Instruction
+        String HNibble = "8";
         String LNibble = "1"; // ALU Sub is 1
         String address = "XX"; //can be an address or a constant
         
@@ -328,7 +363,7 @@ public class Compiler_8bit extends Compiler{
     private void compilePUSH(InstructionNode instruct){
                 
         //Instruction
-        String HNibble = "8";
+        String HNibble = "9";
         String LNibble = "0";
         String address = "FF";
         
@@ -338,7 +373,7 @@ public class Compiler_8bit extends Compiler{
     private void compilePOP(InstructionNode instruct){
         
         //Instruction
-        String HNibble = "9";
+        String HNibble = "A";
         String LNibble = "0";
         String address = "FF"; //unnecessary
         
@@ -350,7 +385,7 @@ public class Compiler_8bit extends Compiler{
         Token destination = instruct.arguments.get(0); //label to jump to
         
         //Instruction
-        String HNibble = "8";
+        String HNibble = "9";
         String LNibble = "1";
         String address = "FF"; //label to jump to
         
@@ -365,7 +400,7 @@ public class Compiler_8bit extends Compiler{
     private void compileRET(InstructionNode instruct){
         
         //Instruction
-        String HNibble = "9";
+        String HNibble = "A";
         String LNibble = "1";
         String address = "FF"; //
         
@@ -471,9 +506,11 @@ public class Compiler_8bit extends Compiler{
         }
     }
 
+    @Override
     public boolean hasErrors(){
         return !errors.isEmpty();
     }
+    @Override
     public ArrayList<String> getErrors(){
         return errors;
     }
@@ -492,32 +529,25 @@ public class Compiler_8bit extends Compiler{
         return "";
     }
     private void saveCompiled(ArrayList<String> compiledInstructions) {
-        File hiByte;
-        File loByte;
+        File byteFile;
         
         if(textFile != null){
-            String hiByteString = textFile.getParent() + File.separator
+            String byteString = textFile.getParent() + File.separator
                     + textFile.getName().substring(0, textFile.getName().length() - 4)
-                    + "Hi.txt";
-            String loByteString = textFile.getParent() + File.separator
-                    + textFile.getName().substring(0, textFile.getName().length() - 4)
-                    + "Lo.txt";
-            hiByte = new File(hiByteString);
-            loByte = new File(loByteString);
+                    + "BIN.txt";
+            byteFile = new File(byteString);
         }
         else{
-            hiByte = new File("tempHi.txt");
-            loByte = new File("tempLo.txt");
+            byteFile = new File("tempBIN.txt");
         }
         
-        try (BufferedWriter bwHi = new BufferedWriter(new FileWriter(hiByte));
-                BufferedWriter bwLo = new BufferedWriter(new FileWriter(loByte))) {
+        try (BufferedWriter bwHi = new BufferedWriter(new FileWriter(byteFile))) {
             for(String bytecode : compiledInstructions){
-                bwHi.append(bytecode.substring(0,2)).append("\n");
-                bwLo.append(bytecode.substring(2)).append("\n");
+                bwHi.append(bytecode).append("\n");
             }
         } catch (IOException ex) {
-        Logger.getLogger(Compiler_8bit.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("error saving");
+            Logger.getLogger(Compiler_8bit.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

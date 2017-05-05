@@ -1,0 +1,18 @@
+#Starting a new 8 bit compiler
+
+Main:	LOD 0xFF
+		STO [var1]
+		OUT 0, 0x48
+		OUT 0, 0x65
+		OUT 0, 0x6C
+		OUT 0, 0x6C
+		OUT 0, 0x6F
+		OUT 0, 0x20
+		OUT 0, 0x57
+		OUT 0, 0x6F
+		OUT 0, 0x72
+		OUT 0, 0x6C
+		OUT 0, 0x64 
+		OUT 1, [var1]
+
+var1:		VAR 00
