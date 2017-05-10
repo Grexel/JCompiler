@@ -48,7 +48,7 @@ Similar to the main register data out bus, unfinished with only one working inpu
 
 [selector1]: https://grexel.github.io/JCompiler/MML_16bit/BUSES/Selector1.JPG "Selector Page 1"
 [selector2]: https://grexel.github.io/JCompiler/MML_16bit/BUSES/Selector2.JPG "Selector Page 2"
-[aluBus]: https://grexel.github.io/JCompiler/MML_16bit/BUSES/ALUAddend2Bus.JPG "ALU Bus"
+[aluBus]: https://grexel.github.io/JCompiler/MML_16bit/BUSES/ALUAddend2BUS.JPG "ALU Bus"
 [pcBus]: https://grexel.github.io/JCompiler/MML_16bit/BUSES/PCJumpBUS.JPG "PC Jump Bus"
 [ramAddressBus]: https://grexel.github.io/JCompiler/MML_16bit/BUSES/RAMAddressBUS.JPG "RAM Address Bus"
 [ramDataInBus]: https://grexel.github.io/JCompiler/MML_16bit/BUSES/RAMDataInBUS.JPG "RAM Data In Bus"
