@@ -1,16 +1,46 @@
-#MMLogic 16-bit CPU Overview
+# MMLogic 16-bit CPU Registers
 
-1. [Control Panel](https://grexel.github.io/JCompiler/MMLogic/MM1_ComputerModel).
-This provides a look into the workings of the CPU. One can see Registers, Outputs, Program Counter, Instruction, Address , Memory data, Stack position, etc.
+## Program Counter
+![PC Low][pcLow]
+![PC High][pcHigh]
 
-2. [Clock, Instructions, RAM](https://grexel.github.io/JCompiler/MMLogic/MM2_ModelClock).
-This shows the main control structure for the CPU, demultiplexing the bits of the Instruction.
+## Instruction and Address Registers
+![Instructions and Registers][instruct]
 
-3. [Registers](https://grexel.github.io/JCompiler/MMLogic/MM3_ProgramCounter).
-A look at the structure of the registers used by the CPU.
+## Stack
+![Stack Low][stackLow]
+![Stack High][stackHigh]
 
-4. [ALU](https://grexel.github.io/JCompiler/MMLogic/MM4_CommandRegisters).
-How the ALU is designed to allow add, add with carry, subtract, and subtract with borrow.
+## Registers
+![Registers 0 - 1][register01]
+![Registers 2 - 3][register23]
+![Registers 4 - 5][register45]
+![Registers 6 - 7][register67]
 
-5. [Buses](https://grexel.github.io/JCompiler/MMLogic/MM5_Instructions).
-The selectors and buses that control the data going into and out of the registers
+## Output
+![Output 0 - 1][output01]
+![Output 2 - 3][output23]
+![Output 4 - 5][output45]
+![Output 6 - 7][output67]
+
+## Input
+![Input 0][input0]
+
+
+
+
+
+[pcLow]: https://grexel.github.io/JCompiler/MML_16bit/Registers/PCLow.JPG "PC Low Byte"
+[pcHigh]: https://grexel.github.io/JCompiler/MML_16bit/Registers/PCHigh.JPG "PC High Byte"
+[stackLow]: https://grexel.github.io/JCompiler/MML_16bit/Registers/StackLow.JPG "Stack Low Byte"
+[stackHigh]: https://grexel.github.io/JCompiler/MML_16bit/Registers/StackHigh.JPG "Stack High Byte"
+[instruct]: https://grexel.github.io/JCompiler/MML_16bit/Registers/InstructionAndAddress.JPG "InstructionAndAddress"
+[register01]: https://grexel.github.io/JCompiler/MML_16bit/Registers/Register01.JPG "Registers 0 - 1"
+[register23]: https://grexel.github.io/JCompiler/MML_16bit/Registers/Register23.JPG "Registers 2 - 3"
+[register45]: https://grexel.github.io/JCompiler/MML_16bit/Registers/Register45.JPG "Registers 4 - 5"
+[register67]: https://grexel.github.io/JCompiler/MML_16bit/Registers/Register67.JPG "Registers 6 - 7"
+[output01]: https://grexel.github.io/JCompiler/MML_16bit/Registers/Output01.JPG "Registers 0 - 1"
+[output23]: https://grexel.github.io/JCompiler/MML_16bit/Registers/Output23.JPG "Registers 2 - 3"
+[output45]: https://grexel.github.io/JCompiler/MML_16bit/Registers/Output45.JPG "Registers 4 - 5"
+[output67]: https://grexel.github.io/JCompiler/MML_16bit/Registers/Output67.JPG "Registers 6 - 7"
+[input0]: https://grexel.github.io/JCompiler/MML_16bit/Registers/Input0.JPG "Input 0"
